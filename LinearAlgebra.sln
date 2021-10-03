@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinearAlgebra", "LinearAlgebra.csproj", "{38F6CA7D-107B-4972-A6CC-2998A769E849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinearAlgebra", "LinearAlgebra.csproj", "{38F6CA7D-107B-4972-A6CC-2998A769E849}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorDemo", "..\VectorDemo\VectorDemo.csproj", "{59ABA396-A533-484B-9811-84EF8E613FCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinearAlgebraLogger", "LinearAlgebraLogger\LinearAlgebraLogger.csproj", "{CB9205D6-C72E-444E-BEAE-9F001BCBD859}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinearAlgebraLogger", "..\LinearAlgebraLogger\LinearAlgebraLogger.csproj", "{1169D04F-F6ED-4108-AEDF-DF9CC3F1DEDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VectorDemo", "VectorDemo\VectorDemo.csproj", "{C60828D2-6289-4AA6-9ADF-434EFC2C62C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{38F6CA7D-107B-4972-A6CC-2998A769E849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38F6CA7D-107B-4972-A6CC-2998A769E849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38F6CA7D-107B-4972-A6CC-2998A769E849}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59ABA396-A533-484B-9811-84EF8E613FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59ABA396-A533-484B-9811-84EF8E613FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59ABA396-A533-484B-9811-84EF8E613FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59ABA396-A533-484B-9811-84EF8E613FCC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1169D04F-F6ED-4108-AEDF-DF9CC3F1DEDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1169D04F-F6ED-4108-AEDF-DF9CC3F1DEDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1169D04F-F6ED-4108-AEDF-DF9CC3F1DEDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1169D04F-F6ED-4108-AEDF-DF9CC3F1DEDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB9205D6-C72E-444E-BEAE-9F001BCBD859}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB9205D6-C72E-444E-BEAE-9F001BCBD859}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB9205D6-C72E-444E-BEAE-9F001BCBD859}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB9205D6-C72E-444E-BEAE-9F001BCBD859}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C60828D2-6289-4AA6-9ADF-434EFC2C62C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C60828D2-6289-4AA6-9ADF-434EFC2C62C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C60828D2-6289-4AA6-9ADF-434EFC2C62C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C60828D2-6289-4AA6-9ADF-434EFC2C62C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
