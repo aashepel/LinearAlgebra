@@ -4,24 +4,28 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using LinearAlgebraLogger;
+using LinearAlgebra.Exceptions;
+using System.Globalization;
 
 namespace LinearAlgebra
 {
     public class MathVector : IMathVector
     {
-		public MathVector(int count, string name)
+		protected MathVector(int count)
 		{
+			if (count < 0)
+            {
+				throw new WrongSizeVectorException();
+            }
 			_dimensions = count;
 			_points = new double[_dimensions];///вектор
-			Name = name;
 			for (int i = 0; i < _dimensions; i++)
             {
 				_points[i] = 0;
 			}
-			Logger.LogInfo($"The vector ({Name}) was created successfully");
 			CalculateLength();
 		}
-		public MathVector(IMathVector vector, string name)
+		public MathVector(IMathVector vector)
         {
             _points = new double[vector.Dimensions];
 			_dimensions = vector.Dimensions;
@@ -29,38 +33,27 @@ namespace LinearAlgebra
 			{
 				_points[i] = vector[i];
 			}
-			Name = name;
-			Logger.LogInfo($"The {vector.GetType().Name}({Name}) was created successfully");
 			CalculateLength();
 		}
 
-		public MathVector(double[] points, string name)
+		public MathVector(double[] points)
         {
 			_points = new double[points.Length];
 			_dimensions = points.Length;
-			Name = name;
 			for (int i = 0; i < _dimensions; i++)
             {
 				_points[i] = points[i];
             }
-			Logger.LogInfo($"The {this.GetType().Name}({Name}) was created successfully");
 			CalculateLength();
 		}
 
-		private static int _dimensions; ///кол-во координат
+		private int _dimensions;
 		private double[] _points;
 		private double _length = 0;
-		public string Name { get; set; }
 		public double Length
 		{
 			get
 			{
-				double length = 0;
-				for (int i = 0; i < _dimensions; i++)
-                {
-					length += Math.Pow(_points[i], 2);
-				}
-				_length = Math.Sqrt(length);
 				return _length;
 			}
 		}
@@ -83,11 +76,19 @@ namespace LinearAlgebra
 		public double this[int i]
 		{
 			get 
-			{ 
+			{
+				if (i < 0 || i >= this.Dimensions)
+                {
+					throw new IndexOutOfRangeMathVectorException();
+                }
 				return _points[i]; 
 			}
 			set 
 			{
+				if (i < 0 || i >= this.Dimensions)
+				{
+					throw new IndexOutOfRangeMathVectorException();
+				}
 				_points[i] = value; 
 			}
 		}
@@ -110,35 +111,19 @@ namespace LinearAlgebra
 		}
 		public static IMathVector operator /(MathVector vector, double x)
 		{
-			for (int i = 0; i < _dimensions; i++)
-            {
-				vector[i] = vector[i] / x;
-			}
-			return vector;
+			return vector.Divide(x);
 		}
 		public static IMathVector operator /(MathVector vector1, MathVector vector2)
 		{
-			for (int i = 0; i < _dimensions; i++)
-            {
-				vector1[i] = vector1[i] / vector2[i];
-			}
-			return vector1;
+			return vector1.Divide(vector2);
 		}
 		public static IMathVector operator -(MathVector vector, double number)
 		{
-			for (int i = 0; i < _dimensions; i++)
-            {
-				vector[i] = vector[i] - number;
-			}
-			return vector;
+			return vector.SumNumber(-number);
 		}
 		public static IMathVector operator -(MathVector vector1, MathVector vector2)
 		{
-			for (int i = 0; i < _dimensions; i++)
-			{
-				vector1[i] = vector1[i] - vector2[i];
-			}
-			return vector1;
+			return vector1.Sum(vector2.MultiplyNumber(-1));
 		}
 		public static double operator %(MathVector vector1, MathVector vector2)
 		{
@@ -148,42 +133,54 @@ namespace LinearAlgebra
 
 		public IMathVector SumNumber(double number)
 		{
-			MathVector z = new MathVector(_dimensions, $"{this.GetType().Name}({Name}) + number({number})");
+			IMathVector resultVector = new MathVector(_dimensions);
 			for (int i = 0; i < _dimensions; i++)
 			{
-				z[i] = this[i] + number;
+				resultVector[i] = this[i] + number;
 			}
-			return z;
+			return resultVector;
 		}
 		public IMathVector Sum(IMathVector vector)
 		{
-			MathVector z = new MathVector(_dimensions, $"{this.GetType().Name}({Name}) + {vector}({vector.Name})");
+			if (this.Dimensions != vector.Dimensions)
+            {
+				throw new DifferentVectorSpacesException();
+            }
+			IMathVector resultVector = new MathVector(_dimensions);
 			for (int i = 0; i < _dimensions; i++)
 			{
-				z[i] = this[i] + vector[i];
+				resultVector[i] = this[i] + vector[i];
 			}
-			return z;
+			return resultVector;
 		}
 		public IMathVector MultiplyNumber(double number)
 		{
-			MathVector z = new MathVector(_dimensions, $"{this.GetType().Name}({Name}) * number({number})");
+			IMathVector resultVector = new MathVector(_dimensions);
 			for (int i = 0; i < _dimensions; i++)
             {
-				z[i] = this[i] * number;
+				resultVector[i] = this[i] * number;
 			}
-			return z;
+			return resultVector;
 		}
 		public IMathVector Multiply(IMathVector vector)
 		{
-			MathVector z = new MathVector(_dimensions, $"{this.GetType().Name}({Name}) * {vector}({vector.Name})");
+			if (this.Dimensions != vector.Dimensions)
+			{
+				throw new DifferentVectorSpacesException();
+			}
+			IMathVector resultVector = new MathVector(_dimensions);
 			for (int i = 0; i < _dimensions; i++)
             {
-				z[i] = this[i] * vector[i];
+				resultVector[i] = this[i] * vector[i];
 			}
-			return z;
+			return resultVector;
 		}
 		public double ScalarMultiply(IMathVector vector)
 		{
+			if (this.Dimensions != vector.Dimensions)
+			{
+				throw new DifferentVectorSpacesException();
+			}
 			double scalarMultiplyResult = 0;
 			for (int i = 0; i < _dimensions; i++)
             {
@@ -200,34 +197,50 @@ namespace LinearAlgebra
 			}
 			return distance;
 		}
-		public static void Print(IMathVector vector)
+		public IMathVector Divide(double number)
 		{
-			string line = "{ ";
-			for (int i = 0; i < _dimensions; i++)
-            {
-				if (i + 1 == _dimensions)
-                {
-					line += $"{vector[i]}";
-				}
-				else
-                {
-					line += $"{vector[i]}, ";
-				}
+			if (number == 0)
+			{
+				throw new DivideByZeroMathVectorException();
 			}
-			line += " }";
-			Logger.LogInfo($"Print {vector.GetType().Name}({vector.Name}): {line}");
+			IMathVector resultVector = new MathVector(this.Dimensions);
+			for (int i = 0; i < this.Dimensions; i++)
+			{
+				resultVector[i] = this[i] / number;
+			}
+			return resultVector;
 		}
 
+		public IMathVector Divide(IMathVector vector)
+		{
+			if (vector.Dimensions != this.Dimensions)
+			{
+				throw new DifferentVectorSpacesException();
+			}
+			IMathVector resultVector = new MathVector(this.Dimensions);
+			for (int i = 0; i < Dimensions; i++)
+			{
+				if (vector[i] == 0)
+                {
+					throw new DivideByZeroMathVectorException();
+				}
+				resultVector[i] = this[i] / vector[i];
+			}
+			return resultVector;
+		}
+        public override string ToString()
+        {
+			string line = "{ ";
+			for (int i = 0; i < _dimensions - 1; i++)
+			{
+				line += $"{this[i].ToString("G", CultureInfo.InvariantCulture)}, ";
+			}
+			line += $"{this[Dimensions - 1].ToString("G", CultureInfo.InvariantCulture)} }}";
+			return line;
+		}
         public IEnumerator GetEnumerator()
         {
             throw new NotImplementedException();
-        }
-
-		// Static methods
-
-		public static void PrintLength(IMathVector vector)
-        {
-			Logger.LogInfo($"Length {vector.GetType().Name}({vector.Name}) = {vector.Length}");
         }
     }
 }

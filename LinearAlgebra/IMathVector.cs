@@ -10,7 +10,6 @@ namespace LinearAlgebra
     public interface IMathVector : IEnumerable
     {
 		int Dimensions { get; }/// Получить размерность вектора (количество координат).
-		string Name { get; set; }
 		double this[int i] { get; set; }/// Индексатор для доступа к элементам вектора. Нумерация с нуля.
 		double Length { get; }/// Рассчитать длину (модуль) вектора.
 		IMathVector SumNumber(double number);/// Покомпонентное сложение с числом.

@@ -27,14 +27,15 @@ namespace LinearAlgebraLogger
         }
         public static void LogDebug(string message)
         {
-            WriteColor("Error: ", message, LoggerColor.Error);
+            WriteColor("Debug: ", message, LoggerColor.Debug);
         }
         private static void WriteColor(string header, string message, LoggerColor color)
         {
             Console.ForegroundColor = (ConsoleColor)color;
             Console.WriteLine(header);
             Console.ResetColor();
-            Console.WriteLine(new string(' ', 6) + message);
+            Console.WriteLine(message);
+            Console.WriteLine();
         }
     }
 }

@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VectorDemo", "VectorDemo\Ve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinearAlgebra", "LinearAlgebra\LinearAlgebra.csproj", "{65472950-8576-4D96-BE96-DFC5A3BBB244}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinearAlgebraFormsApp", "LinearAlgebraFormsApp\LinearAlgebraFormsApp.csproj", "{BD3C8C6A-C434-42B9-86FB-C655A21BB024}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{65472950-8576-4D96-BE96-DFC5A3BBB244}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65472950-8576-4D96-BE96-DFC5A3BBB244}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65472950-8576-4D96-BE96-DFC5A3BBB244}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD3C8C6A-C434-42B9-86FB-C655A21BB024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD3C8C6A-C434-42B9-86FB-C655A21BB024}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD3C8C6A-C434-42B9-86FB-C655A21BB024}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD3C8C6A-C434-42B9-86FB-C655A21BB024}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
