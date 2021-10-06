@@ -18,7 +18,7 @@ namespace VectorDemo
             resultMathVectors[0] = new VectorWithDescription((MathVector)vector1 + (MathVector)(vector2), "Сложение двух векторов при помощи перегрузки оператора");
             resultMathVectors[1] = new VectorWithDescription(vector1.Sum(vector2), "Сложение двух векторов с помощью метода Sum");
             resultMathVectors[2] = new VectorWithDescription((MathVector)vector1 + 5, "Сложение вектора с числом 5 при помощи перегрузки оператора");
-            resultMathVectors[3] = new VectorWithDescription(vector1.SumNumber(5), "Сложениевектора с числом 5 с помощью метода SumNumber");
+            resultMathVectors[3] = new VectorWithDescription(vector1.SumNumber(5), "Сложение вектора с числом 5 с помощью метода SumNumber");
             resultMathVectors[4] = new VectorWithDescription((MathVector)vector1 * (MathVector)(vector2), "Умножение двух векторов при помощи перегрузки оператора");
             resultMathVectors[5] = new VectorWithDescription(vector1.Multiply(vector2), "Умножение двух векторов с помощью метода Multiply");
             resultMathVectors[6] = new VectorWithDescription((MathVector)vector1 * 5, "Умножение вектора на число 5 при помощи перегрузки оператора");
@@ -34,7 +34,14 @@ namespace VectorDemo
 
             foreach (var vector in resultMathVectors)
             {
-                Logger.LogDebug($"{vector.Description}\n\n{vector1ConcatVector2Values}\n{vector}");
+                if (vector.Description.Contains("число"))
+                {
+                    Logger.LogDebug($"{vector.Description}\n\nvector1: {vector1}\n{vector}");
+                }
+                else
+                {
+                    Logger.LogDebug($"{vector.Description}\n\n{vector1ConcatVector2Values}\n{vector}");
+                }
             }
         }
     }
