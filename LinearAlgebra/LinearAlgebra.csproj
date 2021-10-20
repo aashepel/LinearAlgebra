@@ -1,11 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
+    <AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\LinearAlgebraLogger\LinearAlgebraLogger.csproj" />
-  </ItemGroup>
 
 </Project>

@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace LinearAlgebra.Exceptions
 {
+    /// <summary>
+    /// Исключение. Разные размерности двух векторов
+    /// </summary>
     public class DifferentVectorSpacesException : LinearAlgebraBaseException
     {
         private const string _description = "Разные пространства векторов";
+        /// <summary>
+        /// Описание
+        /// </summary>
         public override string Description
         { 
             get

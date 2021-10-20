@@ -9,14 +9,67 @@ namespace LinearAlgebra
 {
     public interface IMathVector : IEnumerable
     {
-		int Dimensions { get; }/// Получить размерность вектора (количество координат).
-		double this[int i] { get; set; }/// Индексатор для доступа к элементам вектора. Нумерация с нуля.
-		double Length { get; }/// Рассчитать длину (модуль) вектора.
-		IMathVector SumNumber(double number);/// Покомпонентное сложение с числом.
-		IMathVector MultiplyNumber(double number);/// Покомпонентное умножение на число.
-		IMathVector Sum(IMathVector vector);/// Сложение с другим вектором.
-		IMathVector Multiply(IMathVector vector);/// Покомпонентное умножение с другим вектором.
-		double ScalarMultiply(IMathVector vector);/// Скалярное умножение на другой вектор.
-		double CalcDistance(IMathVector vector);/// Вычислить Евклидово расстояние до другого вектора.
+		/// <summary>
+		/// Количество (размерность) точек вектора
+		/// </summary>
+		int Dimensions { get; }
+		/// <summary>
+		/// Индексатор. Нумерация с нуля
+		/// </summary>
+		/// <param name="i">Индекс (номер) элемента вектора</param>
+		/// <returns>Элемент вектора по индексу</returns>
+		double this[int i] { get; set; }
+		/// <summary>
+		/// Длина (модуль) вектора
+		/// </summary>
+		double Length { get; }
+		/// <summary>
+		/// Покомпонентное сложение с числом
+		/// </summary>
+		/// <param name="number">Число</param>
+		/// <returns>Новый вектор</returns>
+		IMathVector SumNumber(double number);
+		/// <summary>
+		/// Покомпонентное умножение на число
+		/// </summary>
+		/// <param name="number">Число</param>
+		/// <returns>Новый вектор</returns>
+		IMathVector MultiplyNumber(double number);
+		/// <summary>
+		/// Покомпонентное сложение с другим вектором
+		/// </summary>
+		/// <param name="vector">Вектор</param>
+		/// <returns>Новый вектор</returns>
+		IMathVector Sum(IMathVector vector);
+		/// <summary>
+		/// Покомпонентное умножение с другим вектором
+		/// </summary>
+		/// <param name="vector">Вектор</param>
+		/// <returns>Новый вектор</returns>
+		IMathVector Multiply(IMathVector vector);
+		/// <summary>
+		/// Скалярное умножение
+		/// </summary>
+		/// <param name="vector">Вектор</param>
+		/// <returns>Число</returns>
+		double ScalarMultiply(IMathVector vector);
+		/// <summary>
+		/// Евклидово расстояние до другого вектора
+		/// </summary>
+		/// <param name="vector">Вектор</param>
+		/// <returns>Число - Еквклидово расстояние</returns>
+		double CalcDistance(IMathVector vector);
+		/// <summary>
+		/// Покомпонентное деление вектора на число
+		/// </summary>
+		/// <param name="number">Число</param>
+		/// <returns>Новый вектор</returns>
+		IMathVector DivideNumber(double number);
+		/// <summary>
+		/// Покомпонентное деление вектора на вектор
+		/// </summary>
+		/// <param name="number">Число</param>
+		/// <returns>Новый вектор</returns>
+		IMathVector Divide(IMathVector vector);
 	}
 }

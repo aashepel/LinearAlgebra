@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LinearAlgebraLogger\LinearAlgebraLogger.csproj" />
     <ProjectReference Include="..\LinearAlgebra\LinearAlgebra.csproj" />
   </ItemGroup>
 

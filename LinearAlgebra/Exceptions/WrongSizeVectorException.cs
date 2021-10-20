@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace LinearAlgebra.Exceptions
 {
+    /// <summary>
+    /// Исключение. Неправильно заданный размер вектора
+    /// </summary>
     public class WrongSizeVectorException : LinearAlgebraBaseException
     {
         private const string _desription = "Неправильно заданный размер вектора";
+        /// <summary>
+        /// Описание
+        /// </summary>
         public override string Description
         { 
             get

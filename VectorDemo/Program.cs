@@ -12,6 +12,7 @@ namespace VectorDemo
         {
             IMathVector vector1 = new MathVector(new double[] { 10, -2, 3, 0 });
             IMathVector vector2 = new MathVector(new double[] { 1, 2, -5, 6 });
+            vector1[0] = 0;
             string vector1ConcatVector2Values = $"vector1: {vector1} \nvector2: {vector2}";
             Logger.LogDebug(vector1ConcatVector2Values);
             VectorWithDescription[] resultMathVectors = new VectorWithDescription[15];
@@ -29,7 +30,7 @@ namespace VectorDemo
             resultMathVectors[10] = new VectorWithDescription((vector1 as MathVector) / (vector2 as MathVector), "Деление двух векторов при помощи перегрузки оператора");
             resultMathVectors[11] = new VectorWithDescription((vector1 as MathVector).Divide(vector2), "Деление двух векторов при помощи метода Divide");
             resultMathVectors[11] = new VectorWithDescription((vector1 as MathVector) / 5, "Деление вектора на число 5 при помощи перегрузки оператора");
-            resultMathVectors[12] = new VectorWithDescription((vector1 as MathVector).Divide(5), "Деление вектора на число 5 при помощи метода Divide");
+            resultMathVectors[12] = new VectorWithDescription((vector1 as MathVector).DivideNumber(5), "Деление вектора на число 5 при помощи метода Divide");
             resultMathVectors[13] = new VectorWithDescription((MathVector)vector1 - (MathVector)(vector2), "Вычитание двух векторов при помощи перегрузки оператора");
             resultMathVectors[14] = new VectorWithDescription((MathVector)vector1 - 5, "Вычитание вектора с числом 5 при помощи перегрузки оператора");
 
