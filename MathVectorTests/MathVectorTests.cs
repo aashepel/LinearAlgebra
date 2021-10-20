@@ -70,7 +70,7 @@ namespace MathVectorTests
         }
 
         [TestMethod]
-        public void TestMethodOperatorSumNumberPositive()
+        public void TestMethodOperatorSumNumber()
         {
             int step = 5;
             for (int number = -1000; number <= 1000; number += step)
@@ -473,6 +473,7 @@ namespace MathVectorTests
                 }
             }
         }
+        [TestMethod]
         public void TestMethodOperatorMinus()
         {
             int step = 20;
