@@ -12,6 +12,7 @@ namespace LinearAlgebra
     {
 		/// <summary>
 		/// Protected конструктор для использования внутри методов класса
+		/// Количество точек должно быть положительным
 		/// </summary>
 		/// <param name="count">Количество точек</param>
 		/// <exception cref="WrongSizeVectorException">Бросается исключение, если передаваемый размер меньше или равен нулю</exception>
@@ -27,10 +28,11 @@ namespace LinearAlgebra
             {
 				_points[i] = 0;
 			}
-			CalculateLength();
 		}
+
 		/// <summary>
 		/// Конструктор копирования
+		/// Количество точек в векторе должно быть положительным
 		/// </summary>
 		/// <param name="vector">Передаваемый в конструктор вектор</param>
 		/// <exception cref="WrongSizeVectorException">Бросается исключение, если передаваемый размер меньше или равен нулю</exception>
@@ -46,14 +48,14 @@ namespace LinearAlgebra
 			{
 				_points[i] = vector[i];
 			}
-			CalculateLength();
 		}
+
 		/// <summary>
-		/// Конструктор, принимаемый в качестве параметров массив точек произвольной длины (не меньше 1)
+		/// Конструктор, принимаемый в качестве параметров массив точек произвольной длины
+		/// Количество точек должно быть положительным
 		/// </summary>
 		/// <param name="points"></param>
 		/// <exception cref="WrongSizeVectorException">Бросается исключение, если передаваемый размер меньше или равен нулю</exception>
-
 		public MathVector(double[] points)
         {
 			if (points.Length <= 0)
@@ -66,54 +68,68 @@ namespace LinearAlgebra
             {
 				_points[i] = points[i];
             }
-			CalculateLength();
 		}
+
 		/// <summary>
 		/// Количство координат вектора
 		/// </summary>
 		private int _dimensions;
+
 		/// <summary>
 		/// Массив точек вектора
 		/// </summary>
 		private double[] _points;
+
 		/// <summary>
 		/// Длина вектора
 		/// </summary>
 		private double _length = 0;
+
 		/// <summary>
 		/// Свойство для получения длины (модуля) вектора
 		/// </summary>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public double Length
 		{
 			get
 			{
+				CalculateLength();
 				return _length;
 			}
 		}
+
 		/// <summary>
 		/// Метод для вычисления длины вектора
 		/// </summary>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
         private void CalculateLength()
         {
             _length = 0;
             for (int i = 0; i < _dimensions; i++)
             {
                 _length += Math.Pow(_points[i], 2);
+				if (Double.IsInfinity(_length))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
             }
             _length = Math.Sqrt(_length);
 		}
+
 		/// <summary>
 		/// Свойство для получения количества точек вектора
 		/// </summary>
         public int Dimensions
 		{
 			get 
-			{ 
+			{
 				return _dimensions; 
 			}
 		}
+
 		/// <summary>
-		/// Индексатор. Нумерация с нуля
+		/// Индексатор
+		/// Нумерация с нуля. Индекс должен быть неотрицательным и не выходить за границы размерности вектора
 		/// </summary>
 		/// <param name="i">Индекс элемента, к которому обращаемся</param>
 		/// <returns>Возвращается точка, к которой мы обращаемся по индексу</returns>
@@ -137,117 +153,102 @@ namespace LinearAlgebra
 				_points[i] = value; 
 			}
 		}
-		/// <summary>
-		/// Перегрузка оператора сложения для вектора и числа
-		/// </summary>
-		/// <param name="vector">Вектор</param>
-		/// <param name="number">Число</param>
-		/// <returns>Новый вектор</returns>
+
+		/// <inheritdoc cref="SumNumber(double)"/>
 		public static IMathVector operator +(MathVector vector, double number)
 		{
 			return vector.SumNumber(number);
 		}
-		/// <summary>
-		/// Перегрузка оператора сложения для двух векторов
-		/// </summary>
-		/// <param name="vector1">Вектор 1</param>
-		/// <param name="vector2">Вектор 2</param>
-		/// <returns>Новый вектор</returns>
+
+		/// <inheritdoc cref="Sum(IMathVector)"/>
 		public static IMathVector operator +(MathVector vector1, IMathVector vector2)
 		{
 			return vector1.Sum(vector2);
 		}
-		/// <summary>
-		/// Перегрузка оператора умножения для вектора и числа
-		/// </summary>
-		/// <param name="vector1">Вектор</param>
-		/// <param name="number">Число</param>
-		/// <returns>Новый вектор</returns>
+
+		/// <inheritdoc cref="MultiplyNumber(double)"/>
 		public static IMathVector operator *(MathVector vector1, double number)
 		{
 			return vector1.MultiplyNumber(number);
 		}
-		/// <summary>
-		/// Перегрузка оператора умножения для двух векторов
-		/// </summary>
-		/// <param name="vector1">Вектор 1</param>
-		/// <param name="vector2">Вектор 2</param>
-		/// <returns>Новый вектор</returns>
+
+		/// <inheritdoc cref="Multiply(IMathVector)"/>
 		public static IMathVector operator *(MathVector vector1, IMathVector vector2)
 		{
 			return vector1.Multiply(vector2);
 		}
-		/// <summary>
-		/// Перегрузка оператора деления для вектора и числа
-		/// </summary>
-		/// <param name="vector">Вектор</param>
-		/// <param name="number">Число</param>
-		/// <returns>Новый вектор</returns>
+
+		/// <inheritdoc cref="DivideNumber(double)"/>
 		public static IMathVector operator /(MathVector vector, double number)
 		{
 			return vector.DivideNumber(number);
 		}
-		/// <summary>
-		/// Перегрузка оператора деления для двух векторов
-		/// </summary>
-		/// <param name="vector1">Вектор 1</param>
-		/// <param name="vector2">Вектор 2</param>
-		/// <returns>Новый вектор</returns>
+
+		/// <inheritdoc cref="Divide(IMathVector)"/>
 		public static IMathVector operator /(MathVector vector1, IMathVector vector2)
 		{
 			return vector1.Divide(vector2);
 		}
+
 		/// <summary>
 		/// Перегрузка оператора вычитания для вектора и числа
 		/// </summary>
 		/// <param name="vector">Вектор</param>
 		/// <param name="number">Число</param>
-		/// <returns></returns>
+		/// <returns>Новый вектор</returns>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public static IMathVector operator -(MathVector vector, double number)
 		{
 			return vector.SumNumber(-number);
 		}
+
 		/// <summary>
 		/// Перегрузка оператора вычитания для двух векторов
 		/// </summary>
 		/// <param name="vector1">Вектор 1</param>
 		/// <param name="vector2">Вектор 2</param>
 		/// <returns>Новый вектор</returns>
+		/// <exception cref="DifferentVectorSpacesException">Бросается исключение, если размерности векторов не совпадают</exception>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public static IMathVector operator -(MathVector vector1, IMathVector vector2)
 		{
 			return vector1.Sum(vector2.MultiplyNumber(-1));
 		}
-		/// <summary>
-		/// Перегрузка оператора % (скалярное умножение)
-		/// </summary>
-		/// <param name="vector1">Вектор 1</param>
-		/// <param name="vector2">Вектор 2</param>
-		/// <returns>Число</returns>
+
+		/// <inheritdoc cref="ScalarMultiply(IMathVector)"/>
 		public static double operator %(MathVector vector1, IMathVector vector2)
 		{
 			return vector1.ScalarMultiply(vector2);
 		}
-		
+
 		/// <summary>
 		/// Покомпонентное сложение вектора с числом
 		/// </summary>
 		/// <param name="number">Число</param>
 		/// <returns>Новый вектор</returns>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public IMathVector SumNumber(double number)
 		{
 			IMathVector resultVector = new MathVector(_dimensions);
 			for (int i = 0; i < _dimensions; i++)
 			{
-				resultVector[i] = this[i] + number;
+				double currentResult = this[i] + number;
+				if (Double.IsInfinity(currentResult))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
+				resultVector[i] = currentResult;
 			}
 			return resultVector;
 		}
+
 		/// <summary>
 		/// Покомпонентное сложение вектора с другим вектором
 		/// </summary>
 		/// <param name="vector">Вектор</param>
 		/// <returns>Новый вектор</returns>
 		/// <exception cref="DifferentVectorSpacesException">Бросается исключение, если размерности векторов не совпадают</exception>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public IMathVector Sum(IMathVector vector)
 		{
 			if (this.Dimensions != vector.Dimensions)
@@ -257,30 +258,44 @@ namespace LinearAlgebra
 			IMathVector resultVector = new MathVector(_dimensions);
 			for (int i = 0; i < _dimensions; i++)
 			{
-				resultVector[i] = this[i] + vector[i];
+				double currentResult = this[i] + vector[i];
+				if (Double.IsInfinity(currentResult))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
+				resultVector[i] = currentResult;
 			}
 			return resultVector;
 		}
+
 		/// <summary>
 		/// Покомпонентное умножение вектора на число
 		/// </summary>
 		/// <param name="number">Число</param>
 		/// <returns>Новый вектор</returns>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public IMathVector MultiplyNumber(double number)
 		{
 			IMathVector resultVector = new MathVector(_dimensions);
 			for (int i = 0; i < _dimensions; i++)
             {
-				resultVector[i] = this[i] * number;
+				double currentResult = this[i] * number;
+				if (Double.IsInfinity(currentResult))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
+				resultVector[i] = currentResult;
 			}
 			return resultVector;
 		}
+
 		/// <summary>
 		/// Покомпонентное умножение вектора на другой вектор
 		/// </summary>
 		/// <param name="vector">Вектор</param>
 		/// <returns>Новый вектор</returns>
 		/// <exception cref="DifferentVectorSpacesException">Бросается исключение, если размерности векторов не совпадают</exception>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public IMathVector Multiply(IMathVector vector)
 		{
 			if (this.Dimensions != vector.Dimensions)
@@ -290,16 +305,23 @@ namespace LinearAlgebra
 			IMathVector resultVector = new MathVector(_dimensions);
 			for (int i = 0; i < _dimensions; i++)
             {
-				resultVector[i] = this[i] * vector[i];
+				double currentResult = this[i] * vector[i];
+				if (Double.IsInfinity(currentResult))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
+				resultVector[i] = currentResult;
 			}
 			return resultVector;
 		}
+
 		/// <summary>
 		/// Скалярное умножение вектора на другой вектор
 		/// </summary>
 		/// <param name="vector">Вектор</param>
 		/// <returns>Число - результат скалярного умножения</returns>
 		/// <exception cref="DifferentVectorSpacesException">Бросается исключение, если размерности векторов не совпадают</exception>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public double ScalarMultiply(IMathVector vector)
 		{
 			if (this.Dimensions != vector.Dimensions)
@@ -309,15 +331,23 @@ namespace LinearAlgebra
 			double scalarMultiplyResult = 0;
 			for (int i = 0; i < _dimensions; i++)
             {
-				scalarMultiplyResult += this[i] * vector[i];
+				double currentResult = this[i] * vector[i];
+				if (Double.IsInfinity(currentResult))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
+				scalarMultiplyResult += currentResult;
 			}
 			return scalarMultiplyResult;
 		}
+
 		/// <summary>
 		/// Вычисление Еквклидова расстояния
 		/// </summary>
 		/// <param name="vector">Вектор</param>
 		/// <returns>Число</returns>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
+		/// <exception cref="DifferentVectorSpacesException">Бросается исключение, если размерности векторов не совпадают</exception>
 		public double CalcDistance(IMathVector vector)
 		{
 			double distance = 0;
@@ -328,15 +358,22 @@ namespace LinearAlgebra
 			for (int i = 0; i < _dimensions; i++)
             {
 				distance += Math.Pow(this[i] - vector[i], 2);
+				if (Double.IsInfinity(distance))
+                {
+					throw new InfinityDoubleVectorsException();
+                }					
 			}
 			return Math.Sqrt(distance);
 		}
+
 		/// <summary>
 		/// Покомпонентное деление вектора на число
+		/// Делитель не должен быть равным нулю
 		/// </summary>
 		/// <param name="number">Число, не равное нулю</param>
 		/// <returns>Новый вектор</returns>
 		/// <exception cref="DivideByZeroMathVectorException">Бросается исключение, если передаваемое число равно нулю</exception>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public IMathVector DivideNumber(double number)
 		{
 			if (number == 0)
@@ -346,17 +383,25 @@ namespace LinearAlgebra
 			IMathVector resultVector = new MathVector(this.Dimensions);
 			for (int i = 0; i < this.Dimensions; i++)
 			{
-				resultVector[i] = this[i] / number;
+				double currentResult = this[i] / number;
+				if (Double.IsInfinity(currentResult))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
+				resultVector[i] = currentResult;
 			}
 			return resultVector;
 		}
+
 		/// <summary>
 		/// Покомпонентное деление вектора на другой вектор
+		/// Элементы делителя не должны быть равными нулю
 		/// </summary>
 		/// <param name="vector">Вектор</param>
 		/// <returns>Новый вектор</returns>
 		/// <exception cref="DifferentVectorSpacesException">Бросается исключение, если размерности векторов не совпадают</exception>
 		/// <exception cref="DivideByZeroMathVectorException">Бросается исключение, один из элементов передаваемого вектора равен нулю</exception>
+		/// <exception cref="InfinityDoubleVectorsException">Бросается исключение, если в результате вычисления происходит переаолнение</exception>
 		public IMathVector Divide(IMathVector vector)
 		{
 			if (vector.Dimensions != this.Dimensions)
@@ -370,10 +415,16 @@ namespace LinearAlgebra
                 {
 					throw new DivideByZeroMathVectorException();
 				}
-				resultVector[i] = this[i] / vector[i];
+				double currentResult = this[i] / vector[i];
+				if (Double.IsInfinity(currentResult))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
+				resultVector[i] = currentResult;
 			}
 			return resultVector;
 		}
+
 		/// <summary>
 		/// Переопределенный метод для получения информации о векторе в виде одной строки
 		/// </summary>
@@ -388,10 +439,12 @@ namespace LinearAlgebra
 			line += $"{this[Dimensions - 1].ToString("G", CultureInfo.InvariantCulture)} }}";
 			return line;
 		}
+
         public IEnumerator GetEnumerator()
         {
 			return _points.GetEnumerator();
         }
+
 		/// <summary>
 		/// Переопределенный метод для покомпонентного сравнения двух векторов
 		/// </summary>
@@ -406,7 +459,7 @@ namespace LinearAlgebra
             }
 			for (int i = 0; i < this.Dimensions; i++)
             {
-				if (this[i] != vector[i])
+				if (!this[i].Equals(vector[i]))
                 {
 					return false;
                 }
