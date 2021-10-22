@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LinearAlgebra.Exceptions
 {
-    class InfinityDoubleVectorsException : LinearAlgebraBaseException
+    public class InfinityDoubleVectorsException : LinearAlgebraBaseException
     {
         private const string _description = "При выполнении операции с точками вектора произошло переполнение";
         public override string Description

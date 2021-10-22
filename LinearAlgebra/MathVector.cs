@@ -337,6 +337,10 @@ namespace LinearAlgebra
 					throw new InfinityDoubleVectorsException();
                 }
 				scalarMultiplyResult += currentResult;
+				if (Double.IsInfinity(scalarMultiplyResult))
+                {
+					throw new InfinityDoubleVectorsException();
+                }
 			}
 			return scalarMultiplyResult;
 		}

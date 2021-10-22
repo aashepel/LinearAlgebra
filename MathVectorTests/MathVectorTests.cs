@@ -10,6 +10,7 @@ namespace MathVectorTests
     [TestClass]
     public class MathVectorTests
     {
+        private double _doubleMaxValue = double.MaxValue;
         private void AssertVectors(IMathVector vector1, IMathVector vector2)
         {
             if (vector1.Dimensions != vector2.Dimensions)
@@ -86,7 +87,18 @@ namespace MathVectorTests
             //Assert
             AssertVectors(vector, vectorResult);
         }
-
+        [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodSumNumbers_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            double[] points = new double[] { Double.MaxValue, 0 };
+            double number = double.MaxValue / 4;
+            IMathVector vector = new MathVector(points);
+            //Act
+            vector = vector.SumNumber(number);
+            Console.WriteLine(vector);
+        }
         [TestMethod]
         public void TestMethodOperatorSumRealNumber()
         {
@@ -116,16 +128,16 @@ namespace MathVectorTests
             AssertVectors(vector, vectorResult);
         }
         [TestMethod]
-        [ExpectedException(typeof(DifferentVectorSpacesException))]
-        public void TestMethodSumException()
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorSumNumbers_InfinityDoubleVectorsException()
         {
             //Arrange
-            double[] points = new double[] { 1, 2 };
-            double[] points_1 = new double[] { 1, 2, 1 };
+            double[] points = new double[] { Double.MaxValue, 0 };
+            double number = double.MaxValue / 4;
             IMathVector vector = new MathVector(points);
-            IMathVector vector_1 = new MathVector(points_1);
             //Act
-            IMathVector vectorResult = vector.Sum(vector_1);
+            vector = (vector as MathVector) + number;
+            Console.WriteLine(vector);
         }
         [TestMethod]
         public void TestMethodSum()
@@ -139,7 +151,43 @@ namespace MathVectorTests
             //Assert
             AssertVectors(vector, vectorResult);
         }
-
+        [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodSum_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            IMathVector vector = new MathVector(new double[] { -4.2, 2, double.MaxValue });
+            IMathVector vector1 = new MathVector(new double[] { 0, -3.1, double.MaxValue / 8 });
+            IMathVector vectorResult = new MathVector(new double[] { -4.2, -1.1, double.PositiveInfinity });
+            //Act
+            vector = vector.Sum(vector1);
+            //Assert
+            AssertVectors(vector, vectorResult);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(DifferentVectorSpacesException))]
+        public void TestMethodSum_DifferentVectorSpacesException()
+        {
+            //Arrange
+            double[] points = new double[] { 1, 2 };
+            double[] points_1 = new double[] { 1, 2, 1 };
+            IMathVector vector = new MathVector(points);
+            IMathVector vector_1 = new MathVector(points_1);
+            //Act
+            IMathVector vectorResult = vector.Sum(vector_1);
+        }
+        [TestMethod]
+        public void TestMethodOperatorSum()
+        {
+            //Arrange
+            IMathVector vector = new MathVector(new double[] { -2.2, 0, -2.3 });
+            IMathVector vector1 = new MathVector(new double[] { 1.9, -4.7, 3.1 });
+            IMathVector vectorResult = new MathVector(new double[] { -0.3, -4.7, 0.8 });
+            //Act
+            vector = (vector as MathVector) + vector1;
+            //Assert
+            AssertVectors(vector, vectorResult);
+        }
         [TestMethod]
         [ExpectedException(typeof(DifferentVectorSpacesException))]
         public void TestMethodOperatorSumException()
@@ -153,12 +201,13 @@ namespace MathVectorTests
             IMathVector vectorResult = (vector as MathVector) + vector_1;
         }
         [TestMethod]
-        public void TestMethodOperatorSum()
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorSum_InfinityDoubleVectorsException()
         {
             //Arrange
-            IMathVector vector = new MathVector(new double[] { -2.2, 0, -2.3 });
-            IMathVector vector1 = new MathVector(new double[] { 1.9, -4.7, 3.1 });
-            IMathVector vectorResult = new MathVector(new double[] { -0.3, -4.7, 0.8 });
+            IMathVector vector = new MathVector(new double[] { -2.2, 0, double.MaxValue });
+            IMathVector vector1 = new MathVector(new double[] { 1.9, -4.7, double.MaxValue / 8 });
+            IMathVector vectorResult = new MathVector(new double[] { -0.3, -4.7, double.PositiveInfinity });
             //Act
             vector = (vector as MathVector) + vector1;
             //Assert
@@ -185,6 +234,21 @@ namespace MathVectorTests
             double[] points = new double[] { 4.2, 0, -9.1 };
             double number = 0.5;
             double[] pointsResult = new double[] { 2.1, 0, -4.55 };
+            IMathVector vector = new MathVector(points);
+            IMathVector vectorResult = new MathVector(pointsResult);
+            //Act
+            vector = vector.MultiplyNumber(number);
+            //Assert
+            AssertVectors(vector, vectorResult);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodMultiplyNumbers_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            double[] points = new double[] { 4.2, double.MaxValue, -9.1 };
+            double number = double.MaxValue / 6;
+            double[] pointsResult = new double[] { 2.1, double.PositiveInfinity, -4.55 };
             IMathVector vector = new MathVector(points);
             IMathVector vectorResult = new MathVector(pointsResult);
             //Act
@@ -221,16 +285,19 @@ namespace MathVectorTests
             AssertVectors(vector, vectorResult);
         }
         [TestMethod]
-        [ExpectedException(typeof(DifferentVectorSpacesException))]
-        public void TestMethodMultiplyDifferentVectorSpacesException()
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorMultiplyNumbers_InfinityDoubleVectorsException()
         {
             //Arrange
-            double[] points = new double[] { -51, 15, 0 };
-            double[] points1 = new double[] { 5, 10 };
+            double[] points = new double[] { 4.2, double.MaxValue, -9.1 };
+            double number = double.MaxValue / 6;
+            double[] pointsResult = new double[] { 2.1, double.PositiveInfinity, -4.55 };
             IMathVector vector = new MathVector(points);
-            IMathVector vector1 = new MathVector(points1);
+            IMathVector vectorResult = new MathVector(pointsResult);
             //Act
-            vector.Multiply(vector1);
+            vector = (vector as MathVector) * number;
+            //Assert
+            AssertVectors(vector, vectorResult);
         }
         [TestMethod]
         public void TestMethodMultiply()
@@ -245,8 +312,21 @@ namespace MathVectorTests
             AssertVectors(vector1, vectorResult);
         }
         [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodMultiply_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            IMathVector vector1 = new MathVector(new double[] { 0, double.MaxValue, -5 });
+            IMathVector vector2 = new MathVector(new double[] { -2.5, double.MaxValue / 7, 0 });
+            IMathVector vectorResult = new MathVector(new double[] { 0, double.PositiveInfinity, 0 });
+            //Act
+            vector1 = vector1.Multiply(vector2);
+            //Assert
+            AssertVectors(vector1, vectorResult);
+        }
+        [TestMethod]
         [ExpectedException(typeof(DifferentVectorSpacesException))]
-        public void TestMethodOperatorMultiplyDifferentVectorSpacesException()
+        public void TestMethodMultiply_DifferentVectorSpacesException()
         {
             //Arrange
             double[] points = new double[] { -51, 15, 0 };
@@ -254,7 +334,7 @@ namespace MathVectorTests
             IMathVector vector = new MathVector(points);
             IMathVector vector1 = new MathVector(points1);
             //Act
-            (vector as MathVector).Multiply(vector1);
+            vector.Multiply(vector1);
         }
         [TestMethod]
         public void TestMethodOperatorMultiply()
@@ -267,6 +347,31 @@ namespace MathVectorTests
             vector = (vector as MathVector) * vector1;
             //Assert
             AssertVectors(vector, vectorResult);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(DifferentVectorSpacesException))]
+        public void TestMethodOperatorMultiplyDifferentVectorSpacesException()
+        {
+            //Arrange
+            double[] points1 = new double[] { -51, 15, 0 };
+            double[] points2 = new double[] { 5, 10 };
+            IMathVector vector1 = new MathVector(points1);
+            IMathVector vector2 = new MathVector(points2);
+            //Act
+            vector1 = (vector1 as MathVector) * vector2;
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorMultiply_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            IMathVector vector1 = new MathVector(new double[] { 0, double.MaxValue, -5 });
+            IMathVector vector2 = new MathVector(new double[] { -2.5, double.MaxValue / 7, 0 });
+            IMathVector vectorResult = new MathVector(new double[] { 0, double.PositiveInfinity, 0 });
+            //Act
+            vector1 = (vector1 as MathVector).Multiply(vector2);
+            //Assert
+            AssertVectors(vector1, vectorResult);
         }
         [TestMethod]
         public void TestMethodGetter()
@@ -359,6 +464,21 @@ namespace MathVectorTests
             double scalarMultiply = vector1.ScalarMultiply(vector2);
         }
         [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodScalarMultiply_InfinityDoubleVectorsException()
+        {
+            // Arrange
+            double[] points1 = new double[] { 1.5, double.MaxValue, 0 };
+            double[] points2 = new double[] { 5.8, double.MaxValue / 32, -1 };
+            IMathVector vector1 = new MathVector(points1);
+            IMathVector vector2 = new MathVector(points2);
+            double expectedResult = double.PositiveInfinity;
+            // Act
+            double scalarMultiply = vector1.ScalarMultiply(vector2);
+            // Assert
+            AssertDoubles(expectedResult, scalarMultiply);
+        }
+        [TestMethod]
         public void TestMethodOperatorScalarMultiply()
         {
             // Arrange
@@ -383,6 +503,21 @@ namespace MathVectorTests
             IMathVector vector2 = new MathVector(points2);
             // Act
             double scalarMultiply = (vector1 as MathVector) % vector2;
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorScalarMultiply_InfinityDoubleVectorsException()
+        {
+            // Arrange
+            double[] points1 = new double[] { 1.5, double.MaxValue, 0 };
+            double[] points2 = new double[] { 5.8, double.MaxValue / 32, -1 };
+            IMathVector vector1 = new MathVector(points1);
+            IMathVector vector2 = new MathVector(points2);
+            double expectedResult = double.PositiveInfinity;
+            // Act
+            double scalarMultiply = (vector1 as MathVector) % vector2;
+            // Assert
+            AssertDoubles(expectedResult, scalarMultiply);
         }
         [TestMethod]
         public void TestMethodDistance()
@@ -410,6 +545,21 @@ namespace MathVectorTests
             double expectedResult = Math.Sqrt(326);
             // Act
             double distance = vector1.CalcDistance(vector2);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodDistance_InfinityDoubleVectorsException()
+        {
+            // Arrange
+            double[] points1 = new double[] { -4.3, double.MaxValue, 0 };
+            double[] points2 = new double[] { 3.9, -5.91, 3.5 };
+            IMathVector vector1 = new MathVector(points1);
+            IMathVector vector2 = new MathVector(points2);
+            double expectedResult = double.PositiveInfinity;
+            // Act
+            double distance = vector1.CalcDistance(vector2);
+            // Assert
+            AssertDoubles(distance, expectedResult);
         }
         [TestMethod]
         public void TestMethodOperatorMinusNegativeNumber()
@@ -440,6 +590,21 @@ namespace MathVectorTests
             AssertVectors(vector, vectorResult);
         }
         [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorMinusNumber_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            double[] points = new double[] { 9.5, double.MinValue, 0 };
+            double number = double.MaxValue / 32;
+            double[] pointsResult = new double[] { 7.3, double.NegativeInfinity, -2.2 };
+            IMathVector vector = new MathVector(points);
+            IMathVector vectorResult = new MathVector(pointsResult);
+            //Act
+            vector = (vector as MathVector) - number;
+            //Assert
+            AssertVectors(vector, vectorResult);
+        }
+        [TestMethod]
         public void TestMethodOperatorMinus()
         {
             //Arrange
@@ -462,6 +627,19 @@ namespace MathVectorTests
             IMathVector vector2 = new MathVector(points2);
             // Act
             IMathVector result = (vector1 as MathVector) - vector2;
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorMinus_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            IMathVector vector = new MathVector(new double[] { -4.3, double.MinValue, 0 });
+            IMathVector vector1 = new MathVector(new double[] { 2.2, double.MaxValue / 16, -2.3 });
+            IMathVector vectorResult = new MathVector(new double[] { -6.5, double.NegativeInfinity, 2.3 });
+            //Act
+            vector = (vector as MathVector) - vector1;
+            //Assert
+            AssertVectors(vector, vectorResult);
         }
 
         [TestMethod]
@@ -503,6 +681,21 @@ namespace MathVectorTests
             IMathVector result = vector1.DivideNumber(0);
         }
         [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodDivideNumber_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            double[] points = new double[] { -2.3, double.MaxValue, 0 };
+            double number = 0.00000000001;
+            double[] pointsResult = new double[] { -4.6, double.PositiveInfinity, 0 };
+            IMathVector vector = new MathVector(points);
+            IMathVector vectorResult = new MathVector(pointsResult);
+            //Act
+            vector = vector.DivideNumber(number);
+            //Assert
+            AssertVectors(vector, vectorResult);
+        }
+        [TestMethod]
         public void TestMethodOperatorDividePositiveNumber()
         {
             //Arrange
@@ -541,6 +734,21 @@ namespace MathVectorTests
             IMathVector result = (vector1 as MathVector) / 0;
         }
         [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorDivideNumber_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            double[] points = new double[] { -2.3, double.MaxValue, 0 };
+            double number = 0.000001;
+            double[] pointsResult = new double[] { -4.6, double.PositiveInfinity, 0 };
+            IMathVector vector = new MathVector(points);
+            IMathVector vectorResult = new MathVector(pointsResult);
+            //Act
+            vector = (vector as MathVector) / number;
+            //Assert
+            AssertVectors(vector, vectorResult);
+        }
+        [TestMethod]
         public void TestMethodDivide()
         {
             //Arrange
@@ -577,6 +785,19 @@ namespace MathVectorTests
             IMathVector result = vector1.Divide(vector2);
         }
         [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodDivide_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            IMathVector vector1 = new MathVector(new double[] { -1.5, double.MaxValue, 0 });
+            IMathVector vector2 = new MathVector(new double[] { 0.5, 0.0001, 2 });
+            IMathVector vectorResult = new MathVector(new double[] { -3, double.PositiveInfinity, 0 });
+            //Act
+            vector1 = vector1.Divide(vector2);
+            //Assert
+            AssertVectors(vector1, vectorResult);
+        }
+        [TestMethod]
         public void TestMethodOperatorDivide()
         {
             //Arrange
@@ -611,6 +832,19 @@ namespace MathVectorTests
             IMathVector vector2 = new MathVector(points2);
             // Act
             IMathVector result = (vector1 as MathVector) / vector2;
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InfinityDoubleVectorsException))]
+        public void TestMethodOperatorDivide_InfinityDoubleVectorsException()
+        {
+            //Arrange
+            IMathVector vector1 = new MathVector(new double[] { -1.5, double.MaxValue, 0 });
+            IMathVector vector2 = new MathVector(new double[] { 0.5, 0.00001, 2 });
+            IMathVector vectorResult = new MathVector(new double[] { -3, double.PositiveInfinity, 0 });
+            //Act
+            vector1 = (vector1 as MathVector) / vector2;
+            //Assert
+            AssertVectors(vector1, vectorResult);
         }
 
     }
